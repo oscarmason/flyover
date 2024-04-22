@@ -1,58 +1,24 @@
+import logo from './logo.svg';
+import './App.css';
 import Card from './Card';
 import NavigationPanel from './NavigationPanel';
 import './CardView.css';
+import { useParams } from 'react-router-dom';
 
-var allRelationships = new Map()
-
-var card = {
-  title: 'Master-Slave Replication',
-  content: `
-  # Master-Slave Replication
-  - Master serves both reads and writes
-  - Slaves server only reads
-  - Data is replicated from the master to the slaves
-  - Data can also be replicated from slaves to other slaves; this is useful to reduce load and number of connections on the master
-  - If the master goes offline, the system can continue to operate in read-only mode until a slave is promoted to a master or a new master is provisioned
-  - Updates may be propagated either synchronously or asynchronous
-
-  ## Pros
-  - Data backup
-  - Horizontal scaling
-  - Different clients can use different spaces e.g internal analytics
-  `,
-  tags: ["databases", "replication"],
-  relationships: [
-    {
-      relationship: "is",
-      name: "Database Replication Method"
-    }
-  ]
-}
-
-populateAllRelationships()
-console.log("")
-
-function populateAllRelationships() {
-  card.relationships.forEach(r => {
-    if (!allRelationships.has(r.relationship)) {
-      allRelationships.set(r.relationship, new Map())
-    }
-
-    if (!allRelationships.get(r.relationship).has(r.name)) {
-      allRelationships.get(r.relationship).set(r.name, new Set())
-    }
-
-    allRelationships.get(r.relationship).get(r.name).add(card.title)
-  })
-}
-
-// Map from relationship item to others
-
-export default function CardView() {
-    return (
-      <div className='CardView'>
-        <Card content={card.content}/>
-        <NavigationPanel tags={card.tags} allRelationships={allRelationships}/>
+function CardView({cards, indexMappings, allRelationships}) {
+  const { id } = useParams();
+  const idx = indexMappings[id]
+  const card = cards[idx]
+  return (
+    <div className="App">
+      <div className="Page">
+        <div className='CardView'>
+          <Card content={card.content}/>
+          <NavigationPanel card={card} allRelationships={allRelationships} prev={cards[idx-1]} next={cards[idx+1]}/>
+        </div>
       </div>
-    )
+    </div>
+  );
 }
+
+export default CardView;

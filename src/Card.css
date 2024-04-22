@@ -1,5 +1,5 @@
 h1, h2 {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin: 0;
 }
 
@@ -9,4 +9,12 @@ ul {
 
 ul {
   padding: 2%;
+}
+
+p {
+  line-height: 1.15rem;
+}
+
+code {
+  text-wrap: wrap;
 }
